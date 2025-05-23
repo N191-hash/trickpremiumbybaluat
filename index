@@ -1,0 +1,2315 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #0C0C0C;
+            min-height: 100vh;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 10% 10%, rgba(255, 0, 0, 0.3), transparent 40%),
+                radial-gradient(circle at 90% 20%, rgba(0, 255, 0, 0.3), transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(0, 0, 255, 0.3), transparent 40%),
+                radial-gradient(circle at 80% 90%, rgba(255, 255, 0, 0.3), transparent 40%);
+            z-index: 0;
+            animation: rotateBg 20s infinite linear;
+            will-change: transform;
+            opacity: 0.7;
+        }
+
+        @keyframes rotateBg {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+
+        
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background-color: #FFF;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle var(--duration, 3s) infinite var(--delay, 0s);
+            will-change: transform, opacity;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: linear-gradient(to right, 
+                #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            border-radius: 50%;
+            animation: float var(--duration, 10s) infinite linear var(--delay, 0s);
+            will-change: transform;
+            box-shadow: 
+                0 0 5px rgba(255, 0, 0, 0.8),
+                0 0 10px rgba(255, 255, 0, 0.5),
+                0 0 15px rgba(0, 255, 0, 0.5),
+                0 0 20px rgba(0, 0, 255, 0.8);
+            filter: blur(0.5px);
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(var(--x1, 100px), var(--y1, 100px)) rotate(90deg); }
+            50% { transform: translate(var(--x2, 200px), var(--y2, 0px)) rotate(180deg); }
+            75% { transform: translate(var(--x3, 100px), var(--y3, -100px)) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+
+        
+        .rainbow-text {
+            background-image: linear-gradient(90deg, 
+                #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbow 5s linear infinite;
+            will-change: background-position;
+            background-size: 200% 100%;
+            text-shadow: 
+                0 0 5px rgba(255, 0, 0, 0.7),
+                0 0 10px rgba(255, 255, 0, 0.5),
+                0 0 15px rgba(0, 0, 255, 0.5);
+        }
+
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        
+        .pulsating-border {
+            border: 2px solid transparent;
+            animation: pulseBorder 2s infinite;
+            will-change: box-shadow, border-color;
+        }
+
+        @keyframes pulseBorder {
+            0%, 100% { 
+                border-color: rgba(255, 0, 0, 0.5); 
+                box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+            }
+            25% { 
+                border-color: rgba(255, 255, 0, 0.5); 
+                box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
+            }
+            50% { 
+                border-color: rgba(0, 255, 0, 0.5); 
+                box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+            }
+            75% { 
+                border-color: rgba(0, 0, 255, 0.5); 
+                box-shadow: 0 0 15px rgba(0, 0, 255, 0.5);
+            }
+        }
+
+        
+        .logo {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+            z-index: 5;
+            animation: pulse 2s infinite, shake 5s infinite;
+            will-change: transform, filter;
+        }
+
+        .logo h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            position: relative;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .logo-part-1 {
+            color: #FF0000;
+            animation: colorChange 3s infinite;
+            will-change: color;
+        }
+
+        .logo-part-2 {
+            color: #FFFFFF;
+            text-shadow: 
+                0 0 10px #FFF,
+                0 0 20px #FFF,
+                0 0 30px #FFF;
+            animation: flicker 2s infinite;
+            will-change: text-shadow;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes colorChange {
+            0% { color: #FF0000; }
+            33% { color: #FF00FF; }
+            66% { color: #FFFF00; }
+            100% { color: #FF0000; }
+        }
+
+        @keyframes flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { 
+                text-shadow:
+                    0 0 10px #FFF,
+                    0 0 20px #FFF,
+                    0 0 30px #FFF;
+            }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% { 
+                text-shadow: none; 
+            }
+        }
+
+        
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        
+        .warning-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .warning-content {
+            background-color: rgba(40, 40, 40, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            border: 2px solid #FF0000;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            animation: warning-pulse 2s infinite;
+            will-change: box-shadow;
+        }
+
+        @keyframes warning-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(255, 0, 0, 0.8); }
+        }
+
+        .warning-title {
+            color: #FF0000;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .warning-message {
+            color: #FFF;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .warning-button {
+            background: linear-gradient(135deg, #FF0000, #FF6600);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        .warning-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+        }
+
+        
+        .tabs {
+            display: flex;
+            background: rgba(15, 15, 15, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            color: #aaa;
+            padding: 15px 25px;
+            cursor: pointer;
+            flex: 1;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+            outline: none;
+            z-index: 6;
+        }
+
+        .tab-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(255, 0, 0, 0.2) 0%, 
+                rgba(255, 255, 0, 0.2) 25%, 
+                rgba(0, 255, 0, 0.2) 50%, 
+                rgba(0, 0, 255, 0.2) 75%, 
+                rgba(255, 0, 255, 0.2) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+
+        .tab-button:hover::before {
+            opacity: 1;
+        }
+
+        .tab-button:hover {
+            color: #fff;
+        }
+
+        .tab-button.active {
+            color: #fff;
+            animation: glowText 2s infinite;
+            will-change: text-shadow;
+        }
+
+        @keyframes glowText {
+            0%, 100% { text-shadow: 0 0 5px rgba(255, 0, 0, 0.8); }
+            25% { text-shadow: 0 0 5px rgba(255, 255, 0, 0.8); }
+            50% { text-shadow: 0 0 5px rgba(0, 255, 0, 0.8); }
+            75% { text-shadow: 0 0 5px rgba(0, 0, 255, 0.8); }
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            width: 100%;
+            background: linear-gradient(to right, #FF0000, #FF8000, #FFFF00, #00FF00, #0000FF, #8000FF, #FF00FF);
+            animation: rainbow 5s linear infinite;
+            background-size: 200% 100%;
+            will-change: background-position;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+            will-change: opacity, transform;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        
+        .mod-panel {
+            background-color: rgba(24, 24, 24, 0.8);
+            backdrop-filter: blur(8px);
+            border-radius: 0.8rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mod-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 0, 0, 0.1),
+                rgba(255, 165, 0, 0.1),
+                rgba(255, 255, 0, 0.1),
+                rgba(0, 255, 0, 0.1),
+                rgba(0, 0, 255, 0.1),
+                rgba(238, 130, 238, 0.1)
+            );
+            transform: rotate(30deg);
+            animation: panelShine 8s linear infinite;
+            will-change: transform;
+            z-index: -1;
+        }
+
+        @keyframes panelShine {
+            0% { transform: rotate(30deg) translateY(0%); }
+            100% { transform: rotate(30deg) translateY(100%); }
+        }
+
+        .mod-panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 15px 30px rgba(0, 0, 0, 0.6),
+                0 0 20px rgba(255, 0, 0, 0.5),
+                0 0 40px rgba(0, 0, 255, 0.3);
+        }
+
+        .panel-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #333;
+            color: #FF0000;
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: titleGlow 2s infinite;
+            will-change: text-shadow;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 0 0 10px rgba(255, 0, 0, 0.8); }
+            50% { text-shadow: 0 0 20px rgba(255, 0, 0, 1); }
+        }
+
+        
+        .switches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .checkboxes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .sliders-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        
+        .switch-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: rgba(30, 30, 30, 0.7);
+            border-radius: 8px;
+            transition: all 0.3s;
+            border-left: 3px solid rgba(255, 0, 0, 0.5);
+        }
+
+        .switch-item:hover {
+            background-color: rgba(40, 40, 40, 0.8);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+            transform: translateX(5px);
+        }
+
+        .switch-label {
+            font-weight: 500;
+            font-size: 1.05rem;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(36, 36, 36, 0.9);
+            transition: .4s ease;
+            border-radius: 30px;
+            border: 1px solid #333;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: #888;
+            transition: .4s ease;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #FF0000;
+            box-shadow: 
+                0 0 8px rgba(255, 0, 0, 0.8),
+                0 0 16px rgba(255, 0, 0, 0.4);
+            animation: redPulse 2s infinite;
+            will-change: box-shadow;
+        }
+
+        @keyframes redPulse {
+            0%, 100% { box-shadow: 0 0 8px rgba(255, 0, 0, 0.8); }
+            50% { box-shadow: 0 0 16px rgba(255, 0, 0, 1); }
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(30px);
+            background-color: #000;
+            box-shadow: inset 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+
+        
+        .checkbox-item {
+            margin-bottom: 0.75rem;
+            padding: 12px 15px;
+            background-color: rgba(30, 30, 30, 0.7);
+            border-radius: 8px;
+            transition: all 0.3s;
+            border-left: 3px solid rgba(0, 128, 255, 0.5);
+        }
+
+        .checkbox-item:hover {
+            background-color: rgba(40, 40, 40, 0.8);
+            box-shadow: 0 0 15px rgba(0, 128, 255, 0.3);
+            transform: translateX(5px);
+        }
+
+        .checkbox-container {
+            position: relative;
+            display: flex;
+            cursor: pointer;
+            user-select: none;
+            align-items: center;
+        }
+
+        .checkbox-label {
+            margin-left: 2.2rem;
+            font-size: 1.05rem;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 24px;
+            width: 24px;
+            background-color: rgba(36, 36, 36, 0.9);
+            transition: all 0.3s ease;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+
+        .checkbox-container:hover .checkmark {
+            background-color: #333;
+            box-shadow: 0 0 8px rgba(0, 128, 255, 0.4);
+        }
+
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: #FF0000;
+            box-shadow: 
+                0 0 8px rgba(255, 0, 0, 0.8),
+                0 0 16px rgba(255, 0, 0, 0.4);
+            animation: redPulse 2s infinite;
+            will-change: box-shadow;
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+            animation: checkmarkAppear 0.3s forwards;
+            will-change: transform, opacity;
+        }
+
+        @keyframes checkmarkAppear {
+            from { opacity: 0; transform: scale(0.5) rotate(45deg); }
+            to { opacity: 1; transform: scale(1) rotate(45deg); }
+        }
+
+        .checkbox-container .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 6px;
+            height: 12px;
+            border: solid #000;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+       
+        .slider-item {
+            margin-bottom: 1.5rem;
+            padding: 15px;
+            background-color: rgba(30, 30, 30, 0.7);
+            border-radius: 10px;
+            transition: all 0.3s;
+            border-left: 3px solid rgba(255, 165, 0, 0.5);
+        }
+
+        .slider-item:hover {
+            background-color: rgba(40, 40, 40, 0.8);
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
+            transform: translateX(5px);
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .slider-label {
+            font-weight: 500;
+            font-size: 1.05rem;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+
+        .slider-value {
+            font-weight: 600;
+            color: #FF0000;
+            background: rgba(40, 40, 40, 0.8);
+            padding: 2px 10px;
+            border-radius: 10px;
+            min-width: 40px;
+            text-align: center;
+            box-shadow: 0 0 8px rgba(255, 0, 0, 0.4);
+            animation: valueGlow 2s infinite;
+            will-change: box-shadow;
+        }
+
+        @keyframes valueGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(255, 0, 0, 0.4); }
+            50% { box-shadow: 0 0 12px rgba(255, 0, 0, 0.7); }
+        }
+
+        .slider-wrapper {
+            position: relative;
+            height: 30px;
+            padding: 0;
+            width: 100%;
+        }
+
+        .custom-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 12px;
+            background: rgba(36, 36, 36, 0.9);
+            outline: none;
+            transition: .3s ease;
+            border-radius: 6px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 1px solid #555;
+        }
+
+        .custom-slider::-webkit-slider-runnable-track {
+            height: 12px;
+            cursor: pointer;
+            border-radius: 6px;
+            background: transparent;
+        }
+
+        .custom-slider-track {
+            position: absolute;
+            height: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 0;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #FF0000, #FF3300);
+            pointer-events: none;
+            transition: width 0.2s ease;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #000;
+            cursor: pointer;
+            border: 2px solid #FF0000;
+            margin-top: -7px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 
+                0 0 8px rgba(255, 0, 0, 0.6),
+                0 0 16px rgba(255, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .custom-slider::-moz-range-thumb {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #000;
+            cursor: pointer;
+            border: 2px solid #FF0000;
+            position: relative;
+            z-index: 2;
+            box-shadow: 
+                0 0 8px rgba(255, 0, 0, 0.6),
+                0 0 16px rgba(255, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .custom-slider:hover::-webkit-slider-thumb {
+            background: #333;
+            box-shadow: 
+                0 0 12px rgba(255, 0, 0, 0.9),
+                0 0 24px rgba(255, 0, 0, 0.5);
+            transform: scale(1.2);
+        }
+
+        .custom-slider:hover::-moz-range-thumb {
+            background: #333;
+            box-shadow: 
+                0 0 12px rgba(255, 0, 0, 0.9),
+                0 0 24px rgba(255, 0, 0, 0.5);
+            transform: scale(1.2);
+        }
+
+        /* Settings Panel */
+        .settings-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            animation: labelGlow 3s infinite;
+            will-change: text-shadow;
+        }
+
+        @keyframes labelGlow {
+            0%, 100% { text-shadow: 0 0 3px rgba(255, 0, 0, 0.5); }
+            50% { text-shadow: 0 0 5px rgba(255, 0, 0, 0.8); }
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 5px;
+            background-color: rgba(30, 30, 30, 0.7);
+            border: 1px solid #333;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: #FF0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+            background-color: rgba(40, 40, 40, 0.8);
+        }
+
+        .form-select option {
+            background-color: #1a1a1a;
+        }
+
+        .settings-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0),
+                rgba(255, 255, 255, 0.1),
+                rgba(255, 255, 255, 0)
+            );
+            transform: rotate(30deg);
+            animation: buttonShine 3s infinite;
+            will-change: transform;
+            z-index: 1;
+        }
+
+        @keyframes buttonShine {
+            0% { transform: rotate(30deg) translateX(-100%); }
+            100% { transform: rotate(30deg) translateX(100%); }
+        }
+
+        .button span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .button-primary {
+            background: linear-gradient(135deg, #FF0000, #FF6600);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .button-primary:hover {
+            background: linear-gradient(135deg, #FF6600, #FF0000);
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+        }
+
+        .button-secondary {
+            background: linear-gradient(135deg, #333, #555);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .button-secondary:hover {
+            background: linear-gradient(135deg, #555, #333);
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Footer styling */
+        .mod-footer {
+            margin-top: 2rem;
+            text-align: center;
+            color: #777;
+            font-size: 0.9rem;
+            padding-bottom: 2rem;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.3);
+        }
+
+        /* VIP Badge */
+        .vip-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: badgePulse 2s infinite;
+            will-change: transform, box-shadow;
+            z-index: 10;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #111;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #111 transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+            animation: tooltipAppear 0.3s forwards;
+        }
+
+        @keyframes tooltipAppear {
+            from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* System info bar */
+        #systemInfo {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(20, 20, 20, 0.8);
+            color: #FFF;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            text-align: center;
+            border-top: 1px solid #333;
+            z-index: 100;
+        }
+
+        .info-item {
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .info-label {
+            color: #999;
+        }
+
+        .info-value {
+            color: #FF0000;
+            font-weight: bold;
+        }
+
+        .warning-value {
+            color: #FFFF00;
+            font-weight: bold;
+            animation: blinkWarning 1s infinite;
+        }
+
+        @keyframes blinkWarning {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .danger-value {
+            color: #FF0000;
+            font-weight: bold;
+            animation: blinkDanger 0.5s infinite;
+        }
+
+        @keyframes blinkDanger {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .switches-grid,
+            .checkboxes-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .logo h1 {
+                font-size: 2.5rem;
+            }
+
+            .tab-button {
+                padding: 12px 15px;
+                font-size: 0.9rem;
+            }
+
+            .vip-badge {
+                top: 10px;
+                right: 10px;
+                font-size: 0.8rem;
+                padding: 3px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .switches-grid,
+            .checkboxes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-container {
+                padding: 0.5rem;
+            }
+            
+            .mod-panel {
+                padding: 1rem;
+            }
+
+            .settings-buttons {
+                flex-direction: column;
+            }
+
+            .logo h1 {
+                font-size: 2rem;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab-button {
+                flex: 1 0 33.33%;
+                padding: 10px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="systemInfo">
+        <div class="info-item">
+            <span class="info-label">FPS:</span>
+            <span class="info-value" id="fpsValue">60</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">RAM:</span>
+            <span class="info-value" id="ramValue">420MB</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">CPU:</span>
+            <span class="info-value" id="cpuValue">45%</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Trạng thái:</span>
+            <span class="info-value" id="statusValue">Đang tải...</span>
+        </div>
+    </div>
+
+    
+    <div class="stars-container" id="starsContainer"></div>
+
+    
+    <div class="particles-container" id="particlesContainer"></div>
+
+    
+    <div class="warning-modal" id="warningModal">
+        <div class="warning-content">
+            <h2 class="warning-title">⚠️ Cảnh Báo ⚠️</h2>
+            <p class="warning-message">
+                Mod Menu VIP này chứa nhiều hiệu ứng nặng và có thể gây lag trên thiết bị của bạn. Hiệu suất có thể bị ảnh hưởng đáng kể trên các thiết bị cấu hình thấp.
+                <br><br>
+                Tiếp tục sử dụng nếu bạn chắc chắn thiết bị của mình đủ mạnh.
+            </p>
+            <button id="continueButton" class="warning-button">Tôi Hiểu, Tiếp Tục</button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="logo">
+            <h1><span class="logo-part-1">MENU</span><span class="logo-part-2">TRICK</span></h1>
+            <div class="vip-badge">baluat</div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-button active" data-tab="features">Chức Năng</button>
+            <button class="tab-button" data-tab="settings">Cài Đặt</button>
+            <button class="tab-button" data-tab="effects">Hiệu Ứng</button>
+            <button class="tab-button" data-tab="security">Bảo Mật</button>
+        </div>
+
+        
+        <div id="featuresTab" class="tab-content active">
+            <!-- chức năng baluat tweaks -->
+            <section class="mod-panel">
+                <h2 class="panel-title">Chức Năng VIP</h2>
+                
+                <div class="switches-grid" id="switchesGrid">
+                    <!-- Switch đẹp nè má  -->
+                </div>
+            </section>
+
+            <!-- checkbox ne  Panel -->
+            <section class="mod-panel">
+                <h2 class="panel-title">Tùy Chọn Bổ Sung</h2>
+                
+                <div class="checkboxes-grid" id="checkboxesGrid">
+                    
+                </div>
+            </section>
+
+            <!-- Sliders Chỉnh Của Luật  -->
+            <section class="mod-panel">
+                <h2 class="panel-title">Điều Chỉnh Thông Số</h2>
+                
+                <div class="sliders-grid" id="slidersGrid">
+                    
+                </div>
+            </section>
+        </div>
+
+        
+        <div id="settingsTab" class="tab-content">
+            <section class="mod-panel">
+                <h2 class="panel-title">Cài Đặt Mod Menu</h2>
+                
+                <form class="settings-form">
+                    <div class="form-group">
+                        <label for="themeColor" class="form-label">Màu chủ đề</label>
+                        <select id="themeColor" class="form-select">
+                            <option value="red">Đỏ</option>
+                            <option value="blue">Xanh dương</option>
+                            <option value="green">Xanh lá</option>
+                            <option value="purple">Tím</option>
+                            <option value="orange">Cam</option>
+                            <option value="rainbow">Cầu vồng</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="animationSpeed" class="form-label">Tốc độ hiệu ứng</label>
+                        <div class="slider-wrapper">
+                            <input 
+                                type="range" 
+                                id="animationSpeed" 
+                                class="custom-slider" 
+                                min="1" 
+                                max="10" 
+                                value="5"
+                            >
+                            <div class="custom-slider-track" style="width: 50%"></div>
+                        </div>
+                        <div class="slider-header">
+                            <span>Chậm</span>
+                            <span class="slider-value" id="animationSpeedValue">5</span>
+                            <span>Nhanh</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="effectIntensity" class="form-label">Mức độ hiệu ứng</label>
+                        <div class="slider-wrapper">
+                            <input 
+                                type="range" 
+                                id="effectIntensity" 
+                                class="custom-slider" 
+                                min="1" 
+                                max="10" 
+                                value="8"
+                            >
+                            <div class="custom-slider-track" style="width: 80%"></div>
+                        </div>
+                        <div class="slider-header">
+                            <span>Nhẹ</span>
+                            <span class="slider-value" id="effectIntensityValue">8</span>
+                            <span>Nặng</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="autoSave" class="form-label">Tự động lưu</label>
+                        <label class="switch">
+                            <input type="checkbox" id="autoSave" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gameName" class="form-label">Tên game</label>
+                        <input type="text" id="gameName" class="form-input" placeholder="Nhập tên game..." value="Free Fire Max">
+                    </div>
+                    
+                    <div class="settings-buttons">
+                        <button type="button" id="saveSettingsBtn" class="button button-primary"><span>Lưu cài đặt</span></button>
+                        <button type="button" id="resetSettingsBtn" class="button button-secondary"><span>Đặt lại mặc định</span></button>
+                    </div>
+                </form>
+            </section>
+        </div>
+
+        
+        <div id="effectsTab" class="tab-content">
+            <section class="mod-panel">
+                <h2 class="panel-title">Hiệu Ứng Cao Cấp</h2>
+                
+                <div class="settings-form">
+                    <div class="form-group">
+                        <label class="form-label">Hiệu ứng ngôi sao</label>
+                        <label class="switch">
+                            <input type="checkbox" id="starsEffect" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Hiệu ứng hạt động</label>
+                        <label class="switch">
+                            <input type="checkbox" id="particlesEffect" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Hiệu ứng ánh sáng</label>
+                        <label class="switch">
+                            <input type="checkbox" id="glowEffect" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Hiệu ứng nhấp nháy</label>
+                        <label class="switch">
+                            <input type="checkbox" id="blinkEffect" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Màu nền chủ đề</label>
+                        <select id="bgEffect" class="form-select">
+                            <option value="red">Đỏ</option>
+                            <option value="blue">Xanh dương</option>
+                            <option value="green">Xanh lá</option>
+                            <option value="rainbow" selected>Cầu vồng</option>
+                            <option value="dark">Tối</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="particleDensity" class="form-label">Mật độ hạt hiệu ứng</label>
+                        <div class="slider-wrapper">
+                            <input 
+                                type="range" 
+                                id="particleDensity" 
+                                class="custom-slider" 
+                                min="1" 
+                                max="10" 
+                                value="7"
+                            >
+                            <div class="custom-slider-track" style="width: 70%"></div>
+                        </div>
+                        <div class="slider-header">
+                            <span>Ít</span>
+                            <span class="slider-value" id="particleDensityValue">7</span>
+                            <span>Nhiều</span>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-buttons">
+                        <button type="button" id="applyEffectsBtn" class="button button-primary"><span>Áp dụng hiệu ứng</span></button>
+                        <button type="button" id="resetEffectsBtn" class="button button-secondary"><span>Đặt lại mặc định</span></button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        
+        <div id="securityTab" class="tab-content">
+            <section class="mod-panel">
+                <h2 class="panel-title">Bảo Mật Cao Cấp</h2>
+                
+                <form class="settings-form">
+                    <div class="form-group">
+                        <label class="form-label">Chế độ VIP</label>
+                        <label class="switch tooltip">
+                            <input type="checkbox" id="vipMode" checked>
+                            <span class="slider"></span>
+                            <span class="tooltiptext">Kích hoạt các tính năng VIP và chống phát hiện cao cấp</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Chống phát hiện</label>
+                        <label class="switch tooltip">
+                            <input type="checkbox" id="antiDetection" checked>
+                            <span class="slider"></span>
+                            <span class="tooltiptext">Ngăn game phát hiện bạn đang sử dụng mod</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Chống ban tài khoản</label>
+                        <label class="switch tooltip">
+                            <input type="checkbox" id="antiBan" checked>
+                            <span class="slider"></span>
+                            <span class="tooltiptext">Bảo vệ tài khoản khỏi bị ban khi sử dụng mod</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Khóa ứng dụng</label>
+                        <label class="switch">
+                            <input type="checkbox" id="enableLock">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div id="passwordSection" style="display: none;">
+                        <div class="form-group">
+                            <label for="passwordInput" class="form-label">Mật khẩu</label>
+                            <div class="password-container">
+                                <input 
+                                    type="password" 
+                                    id="passwordInput" 
+                                    class="form-input" 
+                                    placeholder="Nhập mật khẩu"
+                                >
+                                <button type="button" class="password-toggle" id="togglePassword">👁️</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirmPassword" class="form-label">Xác nhận mật khẩu</label>
+                            <div class="password-container">
+                                <input 
+                                    type="password" 
+                                    id="confirmPassword" 
+                                    class="form-input" 
+                                    placeholder="Nhập lại mật khẩu"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Tự động ẩn mod</label>
+                        <select id="autoHide" class="form-select">
+                            <option value="0">Không bao giờ</option>
+                            <option value="1">Sau 1 phút</option>
+                            <option value="5" selected>Sau 5 phút</option>
+                            <option value="10">Sau 10 phút</option>
+                        </select>
+                    </div>
+                    
+                    <div class="settings-buttons">
+                        <button type="button" id="saveSecurityBtn" class="button button-primary"><span>Lưu cài đặt</span></button>
+                        <button type="button" id="resetSecurityBtn" class="button button-secondary"><span>Đặt lại mặc định</span></button>
+                    </div>
+                </form>
+            </section>
+        </div>
+
+        <footer class="mod-footer">
+            <p class="rainbow-text">VIP MOD MENU PREMIUM © 2023 | Bản Quyền - Không Sao Chép</p>
+        </footer>
+    </div>
+
+    <script>
+        // State management
+        const state = {
+            switches: Array(15).fill(false),
+            checkboxes: Array(10).fill(false),
+            sliders: [50, 30, 75, 10, 60, 90],
+            settings: {
+                themeColor: 'red',
+                animationSpeed: 5,
+                effectIntensity: 8,
+                autoSave: true,
+                gameName: 'PUBG Mobile'
+            },
+            effects: {
+                stars: true,
+                particles: true,
+                glow: true,
+                blink: true,
+                bgEffect: 'rainbow',
+                particleDensity: 7
+            },
+            security: {
+                vipMode: true,
+                antiDetection: true,
+                antiBan: true,
+                enableLock: false,
+                password: '',
+                autoHide: 5
+            },
+            performance: {
+                fps: 60,
+                ram: 420,
+                cpu: 45,
+                status: 'Ổn định'
+            }
+        };
+
+        // Danh sách các chức năng switch với tên rõ ràng
+        const switchOptions = [
+            { id: 0, name: "BUFF FPS" },
+            { id: 1, name: "FIX RUNG" },
+            { id: 2, name: "FIX LỐ" },
+            { id: 3, name: "FAKE AIM" },
+            { id: 4, name: "HEADSHOT" },
+            { id: 5, name: "X LOCK" },
+            { id: 6, name: "FAKE IOS 19" },
+            { id: 7, name: "CONFIG DPI" },
+            { id: 8, name: "Chống giật 100%" },
+            { id: 9, name: "FIX DELAY" },
+            { id: 10, name: "AIMBOT FAKE" },
+            { id: 11, name: "REMAKE BY BALUAT" },
+            { id: 12, name: "ONL SHOT LOCK" },
+            { id: 13, name: "HEADLOCK" },
+            { id: 14, name: "SETTING VIP ONL" }
+        ];
+
+        // Danh sách các chức năng checkbox với tên rõ ràng
+        const checkboxOptions = [
+            { id: 0, name: "IOS ONL" },
+            { id: 1, name: "MODE HOAT DONG" },
+            { id: 2, name: "FPS CAO" },
+            { id: 3, name: "XOÁ LAG" },
+            { id: 4, name: "BALUAT TWEAKS" },
+            { id: 5, name: "FIX TREM" },
+            { id: 6, name: "FIX VIRITABLE" },
+            { id: 7, name: "MP40 TRICK" },
+            { id: 8, name: "UMP TRICK" },
+            { id: 9, name: "M1887 TRICK" }
+        ];
+
+        // Danh sách các chức năng slider với tên rõ ràng
+        const sliderOptions = [
+            { id: 0, name: "LOCK", defaultValue: state.sliders[0] },
+            { id: 1, name: "CONFIG", defaultValue: state.sliders[1] },
+            { id: 2, name: "DPI", defaultValue: state.sliders[2] },
+            { id: 3, name: "RUNG TÂM", defaultValue: state.sliders[3] },
+            { id: 4, name: "LẠC ĐẠN", defaultValue: state.sliders[4] },
+            { id: 5, name: "NHẠY MÁY", defaultValue: state.sliders[5] }
+        ];
+
+        // Load saved state from localStorage
+        function loadState() {
+            const savedState = localStorage.getItem('vipModMenuState');
+            if (savedState) {
+                try {
+                    const parsedState = JSON.parse(savedState);
+                    if (parsedState.switches) state.switches = parsedState.switches;
+                    if (parsedState.checkboxes) state.checkboxes = parsedState.checkboxes;
+                    if (parsedState.sliders) state.sliders = parsedState.sliders;
+                    if (parsedState.settings) state.settings = {...state.settings, ...parsedState.settings};
+                    if (parsedState.effects) state.effects = {...state.effects, ...parsedState.effects};
+                    if (parsedState.security) state.security = {...state.security, ...parsedState.security};
+                    
+                    // Apply loaded settings
+                    applySettings();
+                } catch (error) {
+                    console.error("Error loading saved state:", error);
+                }
+            }
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            localStorage.setItem('vipModMenuState', JSON.stringify(state));
+        }
+
+        // Generate switches
+        function generateSwitches() {
+            const switchesGrid = document.getElementById('switchesGrid');
+            switchesGrid.innerHTML = '';
+
+            switchOptions.forEach(option => {
+                const switchItem = document.createElement('div');
+                switchItem.className = 'switch-item pulsating-border';
+                switchItem.innerHTML = `
+                    <span class="switch-label">${option.name}</span>
+                    <label class="switch tooltip">
+                        <input type="checkbox" class="switch-input" data-index="${option.id}" ${state.switches[option.id] ? 'checked' : ''}>
+                        <span class="slider"></span>
+                        <span class="tooltiptext">Kích hoạt chức năng ${option.name}</span>
+                    </label>
+                `;
+                switchesGrid.appendChild(switchItem);
+            });
+
+            // Add event listeners
+            const switchInputs = document.querySelectorAll('.switch-input');
+            switchInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    state.switches[index] = this.checked;
+                    
+                    // Simulate performance drop when enabling features
+                    if (this.checked) {
+                        updatePerformance(-5, 10, 5);
+                    } else {
+                        updatePerformance(5, -10, -5);
+                    }
+                    
+                    if (state.settings.autoSave) saveState();
+                });
+            });
+        }
+
+        // Generate checkboxes
+        function generateCheckboxes() {
+            const checkboxesGrid = document.getElementById('checkboxesGrid');
+            checkboxesGrid.innerHTML = '';
+
+            checkboxOptions.forEach(option => {
+                const checkboxItem = document.createElement('div');
+                checkboxItem.className = 'checkbox-item pulsating-border';
+                checkboxItem.innerHTML = `
+                    <label class="checkbox-container tooltip">
+                        <span class="checkbox-label">${option.name}</span>
+                        <input type="checkbox" class="checkbox-input" data-index="${option.id}" ${state.checkboxes[option.id] ? 'checked' : ''}>
+                        <span class="checkmark"></span>
+                        <span class="tooltiptext">Bật/tắt tính năng ${option.name}</span>
+                    </label>
+                `;
+                checkboxesGrid.appendChild(checkboxItem);
+            });
+
+            // Add event listeners
+            const checkboxInputs = document.querySelectorAll('.checkbox-input');
+            checkboxInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    state.checkboxes[index] = this.checked;
+                    
+                    // Simulate performance drop when enabling features
+                    if (this.checked) {
+                        updatePerformance(-3, 5, 3);
+                    } else {
+                        updatePerformance(3, -5, -3);
+                    }
+                    
+                    if (state.settings.autoSave) saveState();
+                });
+            });
+        }
+
+        // Generate sliders
+        function generateSliders() {
+            const slidersGrid = document.getElementById('slidersGrid');
+            slidersGrid.innerHTML = '';
+            
+            sliderOptions.forEach(option => {
+                const sliderItem = document.createElement('div');
+                sliderItem.className = 'slider-item pulsating-border';
+                sliderItem.innerHTML = `
+                    <div class="slider-header">
+                        <label class="slider-label">${option.name}</label>
+                        <span class="slider-value" id="slider-value-${option.id}">${option.defaultValue}</span>
+                    </div>
+                    <div class="slider-wrapper">
+                        <input 
+                            type="range" 
+                            min="0" 
+                            max="100" 
+                            value="${option.defaultValue}"
+                            class="custom-slider" 
+                            data-index="${option.id}"
+                        >
+                        <div class="custom-slider-track" style="width: ${option.defaultValue}%"></div>
+                    </div>
+                `;
+                slidersGrid.appendChild(sliderItem);
+            });
+
+            // Add event listeners
+            const sliderInputs = document.querySelectorAll('.custom-slider');
+            sliderInputs.forEach(slider => {
+                slider.addEventListener('input', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    const value = parseInt(this.value);
+                    state.sliders[index] = value;
+                    
+                    // Update the slider track
+                    const parent = this.closest('.slider-wrapper');
+                    const track = parent.querySelector('.custom-slider-track');
+                    track.style.width = `${value}%`;
+                    
+                    // Update the displayed value
+                    const valueDisplay = document.getElementById(`slider-value-${index}`);
+                    if (valueDisplay) {
+                        valueDisplay.textContent = value.toString();
+                    }
+                    
+                    // Simulate performance drop as value increases
+                    if (value > 70) {
+                        updatePerformance(-1, 2, 1);
+                    }
+                });
+                
+                slider.addEventListener('change', function() {
+                    if (state.settings.autoSave) saveState();
+                });
+            });
+        }
+
+        // Tab functionality
+        function setupTabs() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and tabs
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to current button and tab
+                    button.classList.add('active');
+                    document.getElementById(`${tabId}Tab`).classList.add('active');
+                    
+                    // Simulate small performance change when switching tabs
+                    updatePerformance(-2, 3, 2, true);
+                });
+            });
+        }
+
+        // Setup warning modal
+        function setupWarningModal() {
+            const warningModal = document.getElementById('warningModal');
+            const continueButton = document.getElementById('continueButton');
+            
+            continueButton.addEventListener('click', function() {
+                warningModal.style.display = 'none';
+                // Drastically decrease performance when dismissing warning
+                updatePerformance(-15, 30, 15);
+            });
+        }
+
+        // Generate stars - CPU intensive
+        function generateStars() {
+            if (!state.effects.stars) return;
+            
+            const container = document.getElementById('starsContainer');
+            container.innerHTML = '';
+            
+            // Create stars based on effect intensity
+            const starCount = 100 + (state.effects.particleDensity * 50);
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // Random position
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration and delay
+                star.style.setProperty('--duration', `${2 + Math.random() * 3}s`);
+                star.style.setProperty('--delay', `${Math.random() * 5}s`);
+                
+                container.appendChild(star);
+            }
+        }
+
+        // Generate particles - More CPU intensive
+        function generateParticles() {
+            if (!state.effects.particles) return;
+            
+            const container = document.getElementById('particlesContainer');
+            container.innerHTML = '';
+            
+            // Create particles based on effect intensity
+            const particleCount = 20 + (state.effects.particleDensity * 10);
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                
+                // Random animation duration and delay
+                const duration = 5 + Math.random() * 15;
+                particle.style.setProperty('--duration', `${duration}s`);
+                particle.style.setProperty('--delay', `${Math.random() * 5}s`);
+                
+                // Random path
+                particle.style.setProperty('--x1', `${(Math.random() - 0.5) * 400}px`);
+                particle.style.setProperty('--y1', `${(Math.random() - 0.5) * 400}px`);
+                particle.style.setProperty('--x2', `${(Math.random() - 0.5) * 400}px`);
+                particle.style.setProperty('--y2', `${(Math.random() - 0.5) * 200}px`);
+                particle.style.setProperty('--x3', `${(Math.random() - 0.5) * 400}px`);
+                particle.style.setProperty('--y3', `${(Math.random() - 0.5) * 400}px`);
+                
+                // Random size
+                const size = 2 + Math.random() * 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // Setup settings functionality
+        function setupSettings() {
+            const themeColor = document.getElementById('themeColor');
+            const animationSpeed = document.getElementById('animationSpeed');
+            const animationSpeedValue = document.getElementById('animationSpeedValue');
+            const effectIntensity = document.getElementById('effectIntensity');
+            const effectIntensityValue = document.getElementById('effectIntensityValue');
+            const autoSave = document.getElementById('autoSave');
+            const gameName = document.getElementById('gameName');
+            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+            const resetSettingsBtn = document.getElementById('resetSettingsBtn');
+            
+            // Update UI with current settings
+            themeColor.value = state.settings.themeColor;
+            animationSpeed.value = state.settings.animationSpeed;
+            animationSpeedValue.textContent = state.settings.animationSpeed;
+            effectIntensity.value = state.settings.effectIntensity;
+            effectIntensityValue.textContent = state.settings.effectIntensity;
+            autoSave.checked = state.settings.autoSave;
+            gameName.value = state.settings.gameName;
+            
+            // Update slider tracks
+            document.querySelector('#animationSpeed').nextElementSibling.style.width = `${(state.settings.animationSpeed - 1) / 9 * 100}%`;
+            document.querySelector('#effectIntensity').nextElementSibling.style.width = `${(state.settings.effectIntensity - 1) / 9 * 100}%`;
+            
+            // Theme color change
+            themeColor.addEventListener('change', function() {
+                state.settings.themeColor = this.value;
+                updatePerformance(-1, 2, 1, true);
+            });
+            
+            // Animation speed slider
+            animationSpeed.addEventListener('input', function() {
+                state.settings.animationSpeed = parseInt(this.value);
+                animationSpeedValue.textContent = this.value;
+                
+                // Update slider track
+                const parent = this.closest('.slider-wrapper');
+                const track = parent.querySelector('.custom-slider-track');
+                track.style.width = `${(this.value - this.min) / (this.max - this.min) * 100}%`;
+                
+                // Performance impact
+                updatePerformance(0, 1, 0, true);
+            });
+            
+            // Effect intensity slider
+            effectIntensity.addEventListener('input', function() {
+                state.settings.effectIntensity = parseInt(this.value);
+                effectIntensityValue.textContent = this.value;
+                
+                // Update slider track
+                const parent = this.closest('.slider-wrapper');
+                const track = parent.querySelector('.custom-slider-track');
+                track.style.width = `${(this.value - this.min) / (this.max - this.min) * 100}%`;
+                
+                // Higher intensity = lower performance
+                updatePerformance(-this.value/2, this.value, this.value/2);
+            });
+            
+            // Auto save toggle
+            autoSave.addEventListener('change', function() {
+                state.settings.autoSave = this.checked;
+            });
+            
+            // Game name input
+            gameName.addEventListener('change', function() {
+                state.settings.gameName = this.value;
+            });
+            
+            // Save settings button
+            saveSettingsBtn.addEventListener('click', function() {
+                saveState();
+                showNotification('Cài đặt đã được lưu!');
+                updatePerformance(-3, 5, 3, true);
+            });
+            
+            // Reset settings button
+            resetSettingsBtn.addEventListener('click', function() {
+                if (confirm('Bạn có chắc chắn muốn đặt lại cài đặt về mặc định?')) {
+                    state.settings = {
+                        themeColor: 'red',
+                        animationSpeed: 5,
+                        effectIntensity: 8,
+                        autoSave: true,
+                        gameName: 'PUBG Mobile'
+                    };
+                    
+                    // Update UI
+                    themeColor.value = state.settings.themeColor;
+                    animationSpeed.value = state.settings.animationSpeed;
+                    animationSpeedValue.textContent = state.settings.animationSpeed;
+                    effectIntensity.value = state.settings.effectIntensity;
+                    effectIntensityValue.textContent = state.settings.effectIntensity;
+                    autoSave.checked = state.settings.autoSave;
+                    gameName.value = state.settings.gameName;
+                    
+                    // Update slider tracks
+                    document.querySelector('#animationSpeed').nextElementSibling.style.width = `${(state.settings.animationSpeed - 1) / 9 * 100}%`;
+                    document.querySelector('#effectIntensity').nextElementSibling.style.width = `${(state.settings.effectIntensity - 1) / 9 * 100}%`;
+                    
+                    saveState();
+                    showNotification('Cài đặt đã được đặt lại về mặc định!');
+                    updatePerformance(10, -20, -10, true);
+                }
+            });
+        }
+
+        // Setup effects functionality
+        function setupEffects() {
+            const starsEffect = document.getElementById('starsEffect');
+            const particlesEffect = document.getElementById('particlesEffect');
+            const glowEffect = document.getElementById('glowEffect');
+            const blinkEffect = document.getElementById('blinkEffect');
+            const bgEffect = document.getElementById('bgEffect');
+            const particleDensity = document.getElementById('particleDensity');
+            const particleDensityValue = document.getElementById('particleDensityValue');
+            const applyEffectsBtn = document.getElementById('applyEffectsBtn');
+            const resetEffectsBtn = document.getElementById('resetEffectsBtn');
+            
+            // Update UI with current effects settings
+            starsEffect.checked = state.effects.stars;
+            particlesEffect.checked = state.effects.particles;
+            glowEffect.checked = state.effects.glow;
+            blinkEffect.checked = state.effects.blink;
+            bgEffect.value = state.effects.bgEffect;
+            particleDensity.value = state.effects.particleDensity;
+            particleDensityValue.textContent = state.effects.particleDensity;
+            
+            // Update slider track
+            document.querySelector('#particleDensity').nextElementSibling.style.width = `${(state.effects.particleDensity - 1) / 9 * 100}%`;
+            
+            // Stars effect toggle
+            starsEffect.addEventListener('change', function() {
+                state.effects.stars = this.checked;
+                
+                if (this.checked) {
+                    document.getElementById('starsContainer').style.display = 'block';
+                    generateStars();
+                    updatePerformance(-5, 10, 5);
+                } else {
+                    document.getElementById('starsContainer').style.display = 'none';
+                    updatePerformance(5, -10, -5);
+                }
+            });
+            
+            // Particles effect toggle
+            particlesEffect.addEventListener('change', function() {
+                state.effects.particles = this.checked;
+                
+                if (this.checked) {
+                    document.getElementById('particlesContainer').style.display = 'block';
+                    generateParticles();
+                    updatePerformance(-10, 20, 10);
+                } else {
+                    document.getElementById('particlesContainer').style.display = 'none';
+                    updatePerformance(10, -20, -10);
+                }
+            });
+            
+            // Glow effect toggle
+            glowEffect.addEventListener('change', function() {
+                state.effects.glow = this.checked;
+                document.body.classList.toggle('glow-effect', this.checked);
+                updatePerformance(-3, 5, 3);
+            });
+            
+            // Blink effect toggle
+            blinkEffect.addEventListener('change', function() {
+                state.effects.blink = this.checked;
+                document.body.classList.toggle('blink-effect', this.checked);
+                updatePerformance(-5, 8, 5);
+            });
+            
+            // Background effect change
+            bgEffect.addEventListener('change', function() {
+                state.effects.bgEffect = this.value;
+                updatePerformance(-2, 3, 2);
+            });
+            
+            // Particle density slider
+            particleDensity.addEventListener('input', function() {
+                state.effects.particleDensity = parseInt(this.value);
+                particleDensityValue.textContent = this.value;
+                
+                // Update slider track
+                const parent = this.closest('.slider-wrapper');
+                const track = parent.querySelector('.custom-slider-track');
+                track.style.width = `${(this.value - this.min) / (this.max - this.min) * 100}%`;
+                
+                // Performance impact based on density
+                updatePerformance(-this.value, this.value * 2, this.value);
+            });
+            
+            // Apply effects button
+            applyEffectsBtn.addEventListener('click', function() {
+                generateStars();
+                generateParticles();
+                saveState();
+                showNotification('Hiệu ứng đã được áp dụng!');
+                updatePerformance(-15, 25, 15);
+            });
+            
+            // Reset effects button
+            resetEffectsBtn.addEventListener('click', function() {
+                if (confirm('Bạn có chắc chắn muốn đặt lại hiệu ứng về mặc định?')) {
+                    state.effects = {
+                        stars: true,
+                        particles: true,
+                        glow: true,
+                        blink: true,
+                        bgEffect: 'rainbow',
+                        particleDensity: 7
+                    };
+                    
+                    // Update UI
+                    starsEffect.checked = state.effects.stars;
+                    particlesEffect.checked = state.effects.particles;
+                    glowEffect.checked = state.effects.glow;
+                    blinkEffect.checked = state.effects.blink;
+                    bgEffect.value = state.effects.bgEffect;
+                    particleDensity.value = state.effects.particleDensity;
+                    particleDensityValue.textContent = state.effects.particleDensity;
+                    
+                    // Update slider track
+                    document.querySelector('#particleDensity').nextElementSibling.style.width = `${(state.effects.particleDensity - 1) / 9 * 100}%`;
+                    
+                    // Regenerate effects
+                    generateStars();
+                    generateParticles();
+                    
+                    saveState();
+                    showNotification('Hiệu ứng đã được đặt lại về mặc định!');
+                    updatePerformance(-10, 20, 10);
+                }
+            });
+        }
+
+        // Setup security functionality
+        function setupSecurity() {
+            const vipMode = document.getElementById('vipMode');
+            const antiDetection = document.getElementById('antiDetection');
+            const antiBan = document.getElementById('antiBan');
+            const enableLock = document.getElementById('enableLock');
+            const passwordSection = document.getElementById('passwordSection');
+            const passwordInput = document.getElementById('passwordInput');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const togglePassword = document.getElementById('togglePassword');
+            const autoHide = document.getElementById('autoHide');
+            const saveSecurityBtn = document.getElementById('saveSecurityBtn');
+            const resetSecurityBtn = document.getElementById('resetSecurityBtn');
+            
+            // Update UI with current security settings
+            vipMode.checked = state.security.vipMode;
+            antiDetection.checked = state.security.antiDetection;
+            antiBan.checked = state.security.antiBan;
+            enableLock.checked = state.security.enableLock;
+            passwordSection.style.display = state.security.enableLock ? 'block' : 'none';
+            autoHide.value = state.security.autoHide.toString();
+            
+            // VIP mode toggle
+            vipMode.addEventListener('change', function() {
+                state.security.vipMode = this.checked;
+                updatePerformance(-5, 8, 5);
+            });
+            
+            // Anti-detection toggle
+            antiDetection.addEventListener('change', function() {
+                state.security.antiDetection = this.checked;
+                updatePerformance(-3, 5, 3);
+            });
+            
+            // Anti-ban toggle
+            antiBan.addEventListener('change', function() {
+                state.security.antiBan = this.checked;
+                updatePerformance(-3, 5, 3);
+            });
+            
+            // Enable lock toggle
+            enableLock.addEventListener('change', function() {
+                passwordSection.style.display = this.checked ? 'block' : 'none';
+                state.security.enableLock = this.checked;
+                
+                if (!this.checked) {
+                    state.security.password = '';
+                    passwordInput.value = '';
+                    confirmPassword.value = '';
+                }
+            });
+            
+            // Toggle password visibility
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.type === 'password' ? 'text' : 'password';
+                passwordInput.type = type;
+                confirmPassword.type = type;
+                this.textContent = type === 'password' ? '👁️' : '🔒';
+            });
+            
+            // Auto hide timeout change
+            autoHide.addEventListener('change', function() {
+                state.security.autoHide = parseInt(this.value);
+            });
+            
+            // Save security settings
+            saveSecurityBtn.addEventListener('click', function() {
+                if (state.security.enableLock) {
+                    if (passwordInput.value.length < 6) {
+                        showNotification('Mật khẩu phải có ít nhất 6 ký tự!', 'error');
+                        return;
+                    }
+                    
+                    if (passwordInput.value !== confirmPassword.value) {
+                        showNotification('Mật khẩu xác nhận không khớp!', 'error');
+                        return;
+                    }
+                    
+                    state.security.password = passwordInput.value;
+                }
+                
+                saveState();
+                showNotification('Cài đặt bảo mật đã được lưu!');
+                updatePerformance(-2, 3, 2, true);
+            });
+            
+            // Reset security settings
+            resetSecurityBtn.addEventListener('click', function() {
+                if (confirm('Bạn có chắc chắn muốn đặt lại cài đặt bảo mật về mặc định?')) {
+                    state.security = {
+                        vipMode: true,
+                        antiDetection: true,
+                        antiBan: true,
+                        enableLock: false,
+                        password: '',
+                        autoHide: 5
+                    };
+                    
+                    // Update UI
+                    vipMode.checked = state.security.vipMode;
+                    antiDetection.checked = state.security.antiDetection;
+                    antiBan.checked = state.security.antiBan;
+                    enableLock.checked = state.security.enableLock;
+                    passwordSection.style.display = 'none';
+                    passwordInput.value = '';
+                    confirmPassword.value = '';
+                    autoHide.value = state.security.autoHide.toString();
+                    
+                    saveState();
+                    showNotification('Cài đặt bảo mật đã được đặt lại về mặc định!');
+                    updatePerformance(5, -10, -5, true);
+                }
+            });
+        }
+
+        // Simulate performance changes and update UI
+        function updatePerformance(fpsDelta, ramDelta, cpuDelta, temporary = false) {
+            const fpsValue = document.getElementById('fpsValue');
+            const ramValue = document.getElementById('ramValue');
+            const cpuValue = document.getElementById('cpuValue');
+            const statusValue = document.getElementById('statusValue');
+            
+            // Update current values
+            state.performance.fps = Math.max(5, Math.min(60, state.performance.fps + fpsDelta));
+            state.performance.ram = Math.max(100, state.performance.ram + ramDelta);
+            state.performance.cpu = Math.max(5, Math.min(100, state.performance.cpu + cpuDelta));
+            
+            // Update display
+            fpsValue.textContent = Math.floor(state.performance.fps);
+            ramValue.textContent = `${state.performance.ram}MB`;
+            cpuValue.textContent = `${state.performance.cpu}%`;
+            
+            // Add warning classes based on values
+            if (state.performance.fps < 30) {
+                fpsValue.className = state.performance.fps < 15 ? 'danger-value' : 'warning-value';
+            } else {
+                fpsValue.className = 'info-value';
+            }
+            
+            if (state.performance.ram > 500) {
+                ramValue.className = state.performance.ram > 800 ? 'danger-value' : 'warning-value';
+            } else {
+                ramValue.className = 'info-value';
+            }
+            
+            if (state.performance.cpu > 70) {
+                cpuValue.className = state.performance.cpu > 90 ? 'danger-value' : 'warning-value';
+            } else {
+                cpuValue.className = 'info-value';
+            }
+            
+            // Update status text
+            if (state.performance.fps < 15 || state.performance.cpu > 90) {
+                statusValue.textContent = 'Nguy hiểm';
+                statusValue.className = 'danger-value';
+            } else if (state.performance.fps < 30 || state.performance.cpu > 70) {
+                statusValue.textContent = 'Cảnh báo';
+                statusValue.className = 'warning-value';
+            } else {
+                statusValue.textContent = 'Ổn định';
+                statusValue.className = 'info-value';
+            }
+            
+            // If temporary, restore some performance after a delay
+            if (temporary) {
+                setTimeout(() => {
+                    state.performance.fps = Math.min(60, state.performance.fps - fpsDelta/2);
+                    state.performance.ram = Math.max(100, state.performance.ram - ramDelta/2);
+                    state.performance.cpu = Math.max(5, state.performance.cpu - cpuDelta/2);
+                    
+                    fpsValue.textContent = Math.floor(state.performance.fps);
+                    ramValue.textContent = `${state.performance.ram}MB`;
+                    cpuValue.textContent = `${state.performance.cpu}%`;
+                    
+                    // Update classes again
+                    if (state.performance.fps < 30) {
+                        fpsValue.className = state.performance.fps < 15 ? 'danger-value' : 'warning-value';
+                    } else {
+                        fpsValue.className = 'info-value';
+                    }
+                    
+                    if (state.performance.ram > 500) {
+                        ramValue.className = state.performance.ram > 800 ? 'danger-value' : 'warning-value';
+                    } else {
+                        ramValue.className = 'info-value';
+                    }
+                    
+                    if (state.performance.cpu > 70) {
+                        cpuValue.className = state.performance.cpu > 90 ? 'danger-value' : 'warning-value';
+                    } else {
+                        cpuValue.className = 'info-value';
+                    }
+                    
+                    // Update status text
+                    if (state.performance.fps < 15 || state.performance.cpu > 90) {
+                        statusValue.textContent = 'Nguy hiểm';
+                        statusValue.className = 'danger-value';
+                    } else if (state.performance.fps < 30 || state.performance.cpu > 70) {
+                        statusValue.textContent = 'Cảnh báo';
+                        statusValue.className = 'warning-value';
+                    } else {
+                        statusValue.textContent = 'Ổn định';
+                        statusValue.className = 'info-value';
+                    }
+                }, 5000);
+            }
+        }
+
+        // Periodic performance fluctuation for realism
+        function simulatePerformanceFluctuation() {
+            setInterval(() => {
+                const fpsDelta = (Math.random() - 0.5) * 5;
+                const ramDelta = (Math.random() - 0.3) * 10;
+                const cpuDelta = (Math.random() - 0.4) * 5;
+                
+                updatePerformance(fpsDelta, ramDelta, cpuDelta, true);
+            }, 3000);
+        }
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            // Create notification element if it doesn't exist
+            let notification = document.getElementById('notification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'notification';
+                notification.style.position = 'fixed';
+                notification.style.bottom = '40px';
+                notification.style.left = '50%';
+                notification.style.transform = 'translateX(-50%)';
+                notification.style.padding = '12px 25px';
+                notification.style.borderRadius = '5px';
+                notification.style.color = '#fff';
+                notification.style.fontWeight = '500';
+                notification.style.zIndex = '1000';
+                notification.style.transition = 'all 0.3s ease';
+                notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+                document.body.appendChild(notification);
+            }
+            
+            // Set style based on type
+            if (type === 'success') {
+                notification.style.backgroundColor = 'rgba(41, 199, 41, 0.9)';
+                notification.style.borderLeft = '4px solid #1a9517';
+            } else if (type === 'error') {
+                notification.style.backgroundColor = 'rgba(255, 51, 51, 0.9)';
+                notification.style.borderLeft = '4px solid #cc0000';
+            } else if (type === 'info') {
+                notification.style.backgroundColor = 'rgba(51, 153, 255, 0.9)';
+                notification.style.borderLeft = '4px solid #0066cc';
+            }
+            
+            // Set message and show
+            notification.textContent = message;
+            notification.style.opacity = '1';
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+            
+            // Simulate performance hit when showing notification
+            updatePerformance(-1, 2, 1, true);
+        }
+
+        // Apply settings and load themes
+        function applySettings() {
+            // Apply theme color
+            if (state.effects.glow) {
+                document.body.classList.add('glow-effect');
+            }
+            
+            if (state.effects.blink) {
+                document.body.classList.add('blink-effect');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupWarningModal();
+            setupTabs();
+            
+            loadState();
+            generateSwitches();
+            generateCheckboxes();
+            generateSliders();
+            generateStars();
+            generateParticles();
+            setupSettings();
+            setupEffects();
+            setupSecurity();
+            
+            // Start performance simulation
+            simulatePerformanceFluctuation();
+            
+            // Simulate initial performance hit - heavy effects starting
+            updatePerformance(-10, 30, 20);
+        });
+    </script>
+</body>
+</html>
